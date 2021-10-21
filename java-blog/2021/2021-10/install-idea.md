@@ -19,3 +19,7 @@
 3. 在百度网盘下载该 [资源](https://pan.baidu.com/s/1zbB-YgAauq-lNC2b54bvxw)（提取码: `nnij`），将无限试用的破解拖入主界面中，注意要拖两次，之后会提示是否重启，点击是即可  
 4. 重启完之后再主界面按顺序点击`Help -> Eval Rest -> reset -> yes`，注意勾选`Auto reset before per restart`选项即可  
 5. 如果没有任何报错，理论上已经破解完毕，之后等第二天再次查看试用时间，如果一直是三十天即可认定破解成功  
+
+我是[fx67ll.com](https://fx67ll.com)，如果您发现本文有什么错误，欢迎在评论区讨论指正，感谢您的阅读！  
+如果您喜欢这篇文章，欢迎访问我的 [本文github仓库地址](https://github.com/fx67ll/fx67llJava/blob/main/java-blog/2021/2021-10/install-idea.md)，为我点一颗Star，Thanks~ :)  
+***转发请注明参考文章地址，非常感谢！！！***

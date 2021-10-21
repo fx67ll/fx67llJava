@@ -145,3 +145,7 @@ JavaScript是弱类型语言，变量类型完全由当前值决定，这种类�
 7. 如果用`==`来判断两个数值是否相等，由于会发生隐式类型转换，所以是非常存在非常大的漏洞的，
 	为了解决这一问题，引入了`===`（绝对等于）和`!==`（绝对不等于）
 8. [参考资料一](https://www.runoob.com/js/js-type-conversion.html)、[参考资料二](https://www.jb51.net/article/136520.htm)
+
+我是[fx67ll.com](https://fx67ll.com)，如果您发现本文有什么错误，欢迎在评论区讨论指正，感谢您的阅读！  
+如果您喜欢这篇文章，欢迎访问我的 [本文github仓库地址](https://github.com/fx67ll/fx67llJava/blob/main/java-blog/2021/2021-10/variable-datatype.md)，为我点一颗Star，Thanks~ :)  
+***转发请注明参考文章地址，非常感谢！！！***
