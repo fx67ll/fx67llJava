@@ -7,7 +7,10 @@ learn Java
 ### 主目录说明
 |  java-blog   | java-note  |  java-pratice  |  java-project  |
 |  :----:  |  :----:  |  :----:  |  :----:  |
-| java博客文章  | java学习笔记 | java练习 | java学习项目 |
+| java博客文章  | java学习笔记 | java练习 | java学习项目 |、
+
+## 0.2.4.20211026
+* 更新笔记：array（未完成，待补充拓展，标题待修改，用于算法基础练习）
 
 ## 0.2.3.20211022
 * 添加目录说明
