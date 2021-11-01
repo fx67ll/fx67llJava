@@ -7,14 +7,17 @@
 5. <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>/</kbd> 多行注释  
 6. 输入`/**` + <kbd>回车</kbd> 块注释  
 7. <kbd>Ctrl</kbd> + <kbd>F</kbd> 当前文件查找  
-8. 输入`sout` + <kbd>回车</kbd> `System.out.println`快捷输入  
-9. 输入`fori` + <kbd>回车</kbd> for循环快捷输入  
+8. 输入`psvm` + <kbd>回车</kbd> `public static void main`快捷输入  
+9. 输入`sout` + <kbd>回车</kbd> `System.out.println`快捷输入  
+10. 输入`fori` + <kbd>回车</kbd> for循环快捷输入  
 
 #### 后续想到继续补充，先不发博文  
 
 return 会直接跳出到方法外部
 System.exit(状态码) 会中断程序的运行
 System.exit(staus:1);
+
+alt+insert shift全选 有参构造 selectnone无参构造
 
 
 我是 [fx67ll.com](https://fx67ll.com)，如果您发现本文有什么错误，欢迎在评论区讨论指正，感谢您的阅读！  
