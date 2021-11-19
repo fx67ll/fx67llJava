@@ -3,7 +3,7 @@
 ### 什么是拷贝？
 
 
-[参考文档一 ———— js浅拷贝与深拷贝的区别和实现方式](https://www.jianshu.com/p/1c142ec2ca45)  
+[参考文档一 ———— Java 浅拷贝和深拷贝的理解和实现方式](https://www.cnblogs.com/shakinghead/p/7651502.html)  
 
 
 我是 [fx67ll.com](https://fx67ll.com)，如果您发现本文有什么错误，欢迎在评论区讨论指正，感谢您的阅读！  
