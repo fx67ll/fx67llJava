@@ -10,6 +10,7 @@
 8. 输入`psvm` + <kbd>回车</kbd> `public static void main`快捷输入  
 9. 输入`sout` + <kbd>回车</kbd> `System.out.println`快捷输入  
 10. 输入`fori` + <kbd>回车</kbd> for循环快捷输入  
+11. <kbd>ctrl</kbd> + <kbd>alt</kbd> + <kbd>t</kbd> `try/catch`快捷  
 
 #### 后续想到继续补充，先不发博文  
 
