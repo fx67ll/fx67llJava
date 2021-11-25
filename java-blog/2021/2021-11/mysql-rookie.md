@@ -20,6 +20,9 @@
 [参考文档十一 ———— MySQL中的HAVING(分组过滤) ](https://www.cnblogs.com/mahaiwuji/p/12695635.html)  
 [参考文档十二 ———— mysql limit和offset用法](https://www.cnblogs.com/dongml/p/10953846.html)  
 [参考文档十三 ———— mysql as使用方法](https://www.cnblogs.com/yunlong-study/p/14441520.html)  
+[参考文档十四 ———— group by详解](https://blog.csdn.net/jerrytomcat/article/details/82351605)  
+[参考文档十五 ———— MYSQL中唯一约束和唯一索引的区别](https://www.cnblogs.com/xinruyi/p/11343165.html)  
+[参考文档十六 ———— MySQL报错 - Cannot add foreign key constraint](https://blog.csdn.net/weixin_43744799/article/details/85056199)  
 [参考文档 ———— MYSQL基础常见常用语句200条](https://blog.csdn.net/c361604199/article/details/79479398)  
 
 

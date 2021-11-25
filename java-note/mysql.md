@@ -155,6 +155,9 @@ SELECT * FROM test WHERE name = 'zeta';
 # 查找name为zeta并且id大于30的表数据
 SELECT * FROM test WHERE name = 'zeta' HAVING id > 30;
 
+# 根据id分组查询age小于20的表数据
+SELECT * FROM test GROUP BY id HAVING age < 20;
+
 # 查找根据name排序之后的表数据
 SELECT * FROM test ORDER BY name;
 
@@ -226,6 +229,12 @@ SELECT id,name FROM test UNION ALL SELECT id,join_name FROM test_join;
 
 #### 键
 ```sql
+# =======================================================
+# 这里是指定主键约束名的添加和删除方式，但是主键只能有一个，所以感觉主键指定名称貌似有点多余？
+ALTER TABLE test ADD CONSTRAINT pk_test PRIMARY KEY (id);
+ALTER TABLE test DROP PRIMARY KEY `pk_test`;
+# =======================================================
+
 # 添加主键
 ALTER TABLE test ADD PAIMARY KEY (id);
 
@@ -233,32 +242,51 @@ ALTER TABLE test ADD PAIMARY KEY (id);
 ALTER TABLE test DROP PRIMARY KEY;
 
 # =======================================================
-# 这里是指定主键约束名的添加和删除方式，但是主键只能有一个，所以感觉主键指定名称貌似有点多余？
-ALTER TABLE test ADD CONSTRAINT pk_test PRIMARY KEY (id);
-ALTER TABLE test DROP PRIMARY KEY `pk_test`;
-# =======================================================
-
-# =======================================================
 # 知识点提示！！！
-# 第一种方式是不指定外键约束名，会自动生成一个，但是不知道怎么查出来
-# 有人说用SHOW CREATE TABLE 表名 可以查询出来但是我测试了一下不行
+# 不指定外键约束名，会自动生成一个，但是不知道怎么查出来，有人说用SHOW CREATE TABLE 表名 可以查询出来但是我测试了一下不行
 # 这个问题先放着，后期我来填坑
 # =======================================================
 
-# 添加外键，不指定外键的约束名
+# =======================================================
+# 外键增删改查，都要通过外键的约束名，创建时尽量注意写外键的约束名，所以不建议下面这种不指定外键约束名的方式
 ALTER TABLE test ADD FOREIGN KEY (id) REFERENCES test_join(id);
+# =======================================================
 
 # =======================================================
-# 外键增删改查，都要通过外键的约束名，创建时尽量注意写外键的约束名
+# 建两个表用于测试
+CREATE TABLE test_key(id INT, key_name VARCHAR(20), PRIMARY KEY(id));
+CREATE TABLE test_foreign_key(id INT, foreign_key_name VARCHAR(20), PRIMARY KEY(id));
 # =======================================================
 
 # 添加外键
-ALTER TABLE test ADD CONSTRAINT fk_id FOREIGN KEY (id) REFERENCES test_join(id);
+ALTER TABLE test_key ADD CONSTRAINT fk_id FOREIGN KEY (id) REFERENCES test_foreign_key(id);
 
 # 删除外键
-ALTER TABLE test DROP FOREIGN KEY `fk_id`;
+ALTER TABLE test_key DROP FOREIGN KEY `fk_id`;
 
 # 修改外键
-ALTER TABLE test DROP FOREIGN KEY `fk_id`,ADD CONSTRAINT fk_id_new FOREIGN KEY (id) REFERENCES test_join(id);
+ALTER TABLE test_key DROP FOREIGN KEY `fk_id`, ADD CONSTRAINT fk_id_new FOREIGN KEY (id) REFERENCES test_foreign_key(id);
 
+# 添加唯一键
+# 这种不指定唯一键约束名的方式，可以用SHOW CREATE TABLE 查看约束名
+ALTER TABLE test_key ADD UNIQUE(key_name);
+
+# 添加唯一键，指定键名
+ALTER TABLE test_key ADD UNIQUE un_name (name);
+ALTER TABLE test_key ADD UNIQUE INDEX un_name (name);
+ALTER TABLE test_key ADD CONSTRAINT un_name UNIQUE (name);
+CREATE UNIQUE INDEX un_name ON test_key(name);
+
+# 删除唯一键
+DROP INDEX un_name ON test_key;
+
+# 添加索引
+ALTER TABLE test_key ADD INDEX (key_name);
+
+# 添加索引，指定索引名
+ALTER TABLE test_key ADD INDEX in_name (key_name);
+CREATE INDEX in_name ON test_key(key_name);
+
+# 删除索引
+DROP INDEX in_name ON test_key;
 ```
