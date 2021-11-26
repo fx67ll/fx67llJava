@@ -290,3 +290,148 @@ CREATE INDEX in_name ON test_key(key_name);
 # 删除索引
 DROP INDEX in_name ON test_key;
 ```
+
+#### 函数
+```sql
+# =======================================================
+# 聚合函数
+# =======================================================
+
+# 求总数
+SELECT count(id) AS total FROM test;
+
+# 求和
+SELECT sum(age) AS total_age FROM test;
+
+# 求平均值
+SELECT avg(age) AS avg_age FROM test;
+
+# 求最大值
+SELECT max(age) AS max_age FROM test;
+
+# 求最小值
+SELECT min(age) AS min_age FROM test;
+
+
+# =======================================================
+# 数学函数
+# =======================================================
+
+# 绝对值：8
+SELECT abs(-8);
+
+# 二进制：1010，八进制：12，十六进制：A
+SELECT bin(10), oct(10), hex(10);
+
+# 圆周率：3.141593
+SELECT pi();
+
+# 大于x的最小整数值：6
+SELECT ceil(5.5);
+
+# 小于x的最大整数值：5
+SELECT floor(5.5);
+
+# 返回集合中最大的值：86
+SELECT greatest(13, 21, 34, 41, 55, 69, 72, 86);
+
+# 返回集合中最小的值：13
+SELECT least(13, 21, 34, 41, 55, 69, 72, 86);
+
+# 余数：3
+SELECT mod(1023, 10);
+
+# 返回0-1内的随机值，每次不一样
+SELECT rand();
+
+# 提供一个参数生成一个指定值
+SELECT rand(9);  # 0.406868412538309
+SELECT rand('test123');  # 0.15522042769493574
+
+# 四舍五入：1023
+SELECT round(1023.1023);
+
+# 四舍五入，保留三位数：1023.102
+SELECT round(1023.1023, 3);
+
+# 四舍五入整数位：
+SELECT round(1023.1023, -1);  # 1020
+SELECT round(1025.1025, -1);  # 1030，注意和truncate的区别
+
+# 截短为3位小数：1023.102
+SELECT truncate(1023.1023, 3);
+
+# 截短为-1位小数：1020
+SELECT truncate(1023.1023, -1);  # 1020
+SELECT truncate(1025.1025, -1);  # 1020，注意和round的区别
+
+# 符号的值的符号(负数，零或正)对应-1，0或1
+SELECT sign(-6);  # -1
+SELECT sign(0);  # 0
+SELECT sign(6);  # 1
+
+# 平方根：10
+SELECT sqrt(10);
+
+
+# =======================================================
+# 字符串函数
+# =======================================================
+
+# 连接字符串 'fx67ll'
+SELECT concat('f', 'x', '67', 'll');
+
+# 用分隔符连接字符串 'fx67ll'，注意如果分隔符为NULL，则结果为NULL
+SELECT concat_ws('-', 'fx', '6', '7', 'l', 'l');  # fx-6-7-l-l
+SELECT concat_ws(NULL, 'fx', '6', '7', 'l', 'l');  # NULL
+
+# 将字符串 'fx67ll' 从3位置开始的2个字符替换为 '78'
+SELECT insert('fx67ll', 3, 2, '78');  # fx78ll
+
+# 返回字符串 'fx67ll' 左边的3个字符：fx6
+SELECT left('fx67ll', 3);
+
+# 返回字符串 'fx67ll' 右边的4个字符: 67ll
+SELECT right('fx67ll', 4);
+
+# 返回字符串 'fx67ll' 第3个字符之后的子字符串：67ll
+SELECT substring('fx67ll', 3);
+
+# 返回字符串 'fx67ll' 倒数第3个字符之后的子字符串：7ll
+SELECT substring('fx67ll', -3);
+
+# 返回字符串 'fx67ll' 第3个字符之后的2个字符：67
+SELECT substring('fx67ll', 3, 2);
+
+# 切割字符串 ' fx67ll ' 两边的空字符，注意字符串左右有空格：'fx67ll'
+SELECT trim(' fx67ll ');
+
+# 切割字符串 ' fx67ll ' 左边的空字符：'fx67ll '
+SELECT ltrim(' fx67ll ');
+
+# 切割字符串 ' fx67ll ' 右边的字符串：' fx67ll'
+SELECT rtrim(' fx67ll ');
+
+# 重复字符 'fx67ll' 三次：fx67llfx67llfx67ll
+SELECT repeat('fx67ll', 3);
+
+# 对字符串 'fx67ll' 进行反向排序：ll76xf
+SELECT reverse('fx67ll');
+
+# 返回字符串的长度：6
+SELECT length('fx67ll');
+
+# 对字符串进行大小写处理，大小写各两种方式
+SELECT upper('FX67ll');  # FX67LL
+SELECT lower('fx67LL');  # fx67ll
+SELECT ucase('fX67Ll');  # FX67LL
+SELECT lcase('Fx67lL');  # fx67ll
+
+
+# 返回 'f' 在 'fx67ll' 中的第一个位置
+
+# 返回 'l' 在 'fx67ll' 中的第一个位置
+
+# 比较字符串，第一个参数小于第二个返回负数，否则返回正数，会不会相等？
+
+```
