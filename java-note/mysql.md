@@ -100,6 +100,9 @@ ALTER TABLE test CHANGE age age_change INT;
 
 # 只更改表字段属性
 ALTER TABLE test MODIFY age VARCHAR(7);
+
+# 查询所有表信息
+SHOW TABLE STATUS;
 ```
 
 #### 表数据
@@ -428,10 +431,102 @@ SELECT ucase('fX67Ll');  # FX67LL
 SELECT lcase('Fx67lL');  # fx67ll
 
 
-# 返回 'f' 在 'fx67ll' 中的第一个位置
+# 返回 'f' 在 'fx67ll' 中的第一个位置：1
+SELECT position('f' IN 'fx67ll');
 
-# 返回 'l' 在 'fx67ll' 中的第一个位置
+# 返回 '1' 在 'fx67ll' 中的第一个位置，不存在返回0：0
+SELECT position('1' IN 'fx67ll');
 
-# 比较字符串，第一个参数小于第二个返回负数，否则返回正数，会不会相等？
+# 比较字符串，第一个参数小于第二个返回负数，否则返回正数，相等返回0
+SELECT strcmp('abc', 'abd');  # -1
+SELECT strcmp('abc', 'abb');  # 1
+SELECT strcmp('abc', 'abc');  # 0
 
+
+# =======================================================
+# 时间函数
+# =======================================================
+
+# 返回当前日期，时间，日期时间
+SELECT current_date, current_time, now();
+
+# 返回当前时间的时，分，秒
+SELECT hour(current_time), minute(current_time), second(current_time);
+
+# 返回当前日期的年，月，日
+SELECT year(current_date), month(current_date), day(current_date);
+
+# 返回当前日期的季度
+SELECT quarter(current_date);
+
+# 返回当前月份的名称，当前星期的名称
+SELECT monthname(current_date), dayname(current_date);
+
+# 返回当前日在星期的天数，当前日在月的天数，当前日在年的天数
+SELECT dayofweek(current_date), dayofmonth(current_date), dayofyear(current_date);
+
+
+# =======================================================
+# 控制流函数
+# =======================================================
+	
+# IF判断：1
+SELECT IF(2>1, '1', '0')  # 1
+
+# IFNULL判断
+# 判断第一个表达式是否为NULL，如果为NULL则返回第二个参数的值，否则返回第一个参数的值
+SELECT IFNULL(NULL, 1);  # 1
+SELECT IFNULL('fx67ll', 0);  # fx67ll
+
+# ISNULL判断
+# 接受1个参数，并测试该参数是否为NULL，如果参数为NULL，则返回1，否则返回0
+SELECT ISNULL(1);  # 0
+SELECT ISNULL(1/0);  # 1
+
+
+# NULLIF判断
+# 接受2个参数，如果第1个参数等于第2个参数，则返回NULL，否则返回第1个参数
+SELECT NULLIF('fx67ll', 'fx67ll');  # NULL
+SELECT NULLIF('fx67ll', 'll76xf');  # fx67ll
+
+# NULLIF类似于下面的CASE表达式
+CASE WHEN expression_1 = expression_2
+   THEN NULL
+ELSE
+   expression_1
+END;
+
+# CASE判断：second
+SELECT CASE 2
+	WHEN 1 THEN 'first'
+	WHEN 2 THEN 'second'
+	WHEN 3 THEN 'third'
+	ELSE 'other'
+	END;
+
+
+# =======================================================
+# 系统信息函数
+# =======================================================
+
+# 显示当前数据库名
+SELECT database();
+
+# 显示当前用户id
+SELECT connection_id();
+
+# 显示当前用户
+SELECT user();
+
+# 显示当前mysql版本
+SELECT version();
+
+# 返回上次查询的检索行数
+SELECT found_rows();
 ```
+
+
+#### 视图
+#### 存储过程
+#### 备份还原
+#### 用户

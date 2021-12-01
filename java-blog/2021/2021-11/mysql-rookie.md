@@ -7,24 +7,6 @@
 4. 当然今天列出的所有语句都有测试过，但是不确保没有手误打错的时候，如果有什么错误的地方请在评论区指出，非常感谢！！！
 
 
-[参考文档一 ———— MySQL 数据类型](https://www.runoob.com/mysql/mysql-data-types.html)  
-[参考文档二 ———— MySQL主键的理解](https://blog.csdn.net/guyuealian/article/details/50548963)  
-[参考文档三 ———— MySQL之外键约束（FOREIGN KEY）](https://www.cnblogs.com/ccstu/p/12160703.html)  
-[参考文档四 ———— MySQL唯一约束（UNIQUE KEY）](http://c.biancheng.net/view/2445.html)  
-[参考文档五 ———— MySQL create table as与create table like对比](https://blog.csdn.net/leshami/article/details/46800847)  
-[参考文档六 ———— 浅析MySQL中change与modify的区别](https://www.cnblogs.com/liuurick/p/11627109.html)  
-[参考文档七 ———— 详解MySQL---DDL语句、DML语句与DCL语句](https://www.cnblogs.com/zhangmingcheng/p/5295684.html)  
-[参考文档八 ———— MySQl查询语句大全](https://www.cnblogs.com/mofujin/p/11355517.html)  
-[参考文档九 ———— MySQL中的排序(ORDER BY)](https://www.cnblogs.com/Guhongying/p/10541979.html)  
-[参考文档十 ———— mysql中去重 distinct 用法](https://blog.csdn.net/xiaofan1988/article/details/43564133)  
-[参考文档十一 ———— MySQL中的HAVING(分组过滤) ](https://www.cnblogs.com/mahaiwuji/p/12695635.html)  
-[参考文档十二 ———— mysql limit和offset用法](https://www.cnblogs.com/dongml/p/10953846.html)  
-[参考文档十三 ———— mysql as使用方法](https://www.cnblogs.com/yunlong-study/p/14441520.html)  
-[参考文档十四 ———— group by详解](https://blog.csdn.net/jerrytomcat/article/details/82351605)  
-[参考文档十五 ———— MYSQL中唯一约束和唯一索引的区别](https://www.cnblogs.com/xinruyi/p/11343165.html)  
-[参考文档十六 ———— MySQL报错 - Cannot add foreign key constraint](https://blog.csdn.net/weixin_43744799/article/details/85056199)  
-[参考文档 ———— MYSQL基础常见常用语句200条](https://blog.csdn.net/c361604199/article/details/79479398)  
-
 
 我是 [fx67ll.com](https://fx67ll.com)，如果您发现本文有什么错误，欢迎在评论区讨论指正，感谢您的阅读！  
 如果您喜欢这篇文章，欢迎访问我的 [本文github仓库地址](https://github.com/fx67ll/fx67llJava/blob/main/java-blog/2021/2021-11/mysql-rookie.md)，为我点一颗Star，Thanks~ :)  
