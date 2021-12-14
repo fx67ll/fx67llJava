@@ -1,14 +1,16 @@
 # MySQL学习笔记
 
 
-### SQL语句分类
+### SQL语句分类  
 1. DDL(Data Definition Language)：数据定义语句，主要用于定义不同的数据段，数据库，表，列，索引等数据库对象的定义  
 2. DML(Data Manipulation Language)：数据操作语句，主要用于增删改查数据库记录，并检查数据完整性  
 3. DCL(Data Control Language)：数据控制语句，主要用于控制不同数据字段直接许可和访问级别的语句，这些语句定义了数据库、表、字段、用户的访问权限和安全级别  
 
 
-### 废话不多说直接上语句练习
+### 双机热备后续可以深入了解操作一下  
 
+
+### 废话不多说直接上语句练习  
 #### 连接MySQL
 ```sql
 # 用户名和密码要紧跟-u-p不能有空格
@@ -17,6 +19,7 @@ mysql -u用户名 -p密码
 # 如果不想明文显示密码，执行命令后会提示输入密码，并且不会明文显示密码
 mysql -u 用户名 -p
 ```
+
 
 #### 数据库
 ```sql
@@ -32,6 +35,7 @@ DROP DATABASE test;
 # 使用数据库
 USE test;
 ```
+
 
 #### 表
 ```sql
@@ -87,6 +91,7 @@ EXPLAIN test;
 SHOW CREATE TABLE test;
 ```
 
+
 #### 表结构
 ```sql
 # 添加表字段
@@ -104,6 +109,7 @@ ALTER TABLE test MODIFY age VARCHAR(7);
 # 查询所有表信息
 SHOW TABLE STATUS;
 ```
+
 
 #### 表数据
 ```sql
@@ -168,8 +174,7 @@ SELECT * FROM test ORDER BY name;
 SELECT * FROM test ORDER BY name DESC;
  
 # =======================================================
-# 注意下面这个排序，如果排序的第一个字段所有值都不同，那么第二列排序就没有意义了
-# 所以我们之前加入了一些name相同的值，所以可以我们可以看下zeta字段的age排序
+# 注意下面这个排序，如果排序的第一个字段所有值都不同，那么第二列排序就没有意义了，所以我们之前加入了一些name相同的值，所以可以我们可以看下zeta字段的age排序
 # =======================================================
 
 # 查找先根据name排序，再根据age排序之后的表数据
@@ -185,6 +190,7 @@ SELECT * FROM test ORDER BY age DESC, name LIMIT 1,3;
 # 使用正则查询name表字段中包含字母g的表数据
 SELECT * FROM test WHERE name regexp '.*[g]+.*';
 ```
+
 
 #### 表数据 —— 连接查询
 ```sql
@@ -229,6 +235,7 @@ SELECT * FROM test,test_join;
 SELECT id,name FROM test UNION SELECT id,join_name FROM test_join;
 SELECT id,name FROM test UNION ALL SELECT id,join_name FROM test_join;
 ```
+
 
 #### 键
 ```sql
@@ -293,6 +300,7 @@ CREATE INDEX in_name ON test_key(key_name);
 # 删除索引
 DROP INDEX in_name ON test_key;
 ```
+
 
 #### 函数
 ```sql
@@ -430,7 +438,6 @@ SELECT lower('fx67LL');  # fx67ll
 SELECT ucase('fX67Ll');  # FX67LL
 SELECT lcase('Fx67lL');  # fx67ll
 
-
 # 返回 'f' 在 'fx67ll' 中的第一个位置：1
 SELECT position('f' IN 'fx67ll');
 
@@ -483,7 +490,6 @@ SELECT IFNULL('fx67ll', 0);  # fx67ll
 SELECT ISNULL(1);  # 0
 SELECT ISNULL(1/0);  # 1
 
-
 # NULLIF判断
 # 接受2个参数，如果第1个参数等于第2个参数，则返回NULL，否则返回第1个参数
 SELECT NULLIF('fx67ll', 'fx67ll');  # NULL
@@ -527,6 +533,155 @@ SELECT found_rows();
 
 
 #### 视图
+```sql
+# 创建视图
+CREATE VIEW v AS SELECT id,name FROM test;
+CREATE VIEW sv(sid,sname) AS SELECT id,name FROM test;
+
+# =======================================================
+# 知识点提示！！！
+# MySQL视图规定FROM关键字后面不能包含子查询
+# 修改了视图对基表数据会有影响，反之，修改了基表数据对视图也会有影响
+# =======================================================
+
+# 查看创建视图语句
+SHOW CREATE VIEW v;
+
+# 查看视图结构
+DESC v;
+DESCRIBE v;
+SHOW COLUMNS IN v;
+SHOW COLUMNS FROM v;
+EXPLAIN v;
+
+# 查看视图数据
+SELECT * FROM v;
+
+# 修改视图
+CREATE OR REPLACE VIEW v AS SELECT name,age FROM test;
+ALTER VIEW v AS SELECT age FROM test;
+
+# 删除视图
+DROP v IF EXISTS v;
+
+# =======================================================
+# 知识点提示！！！
+# 使用视图的好处：1. 安全，只查询需要的数据  2. 性能，避免过多使用JOIN查询  3. 灵活，放弃使用一些过旧的表  
+# =======================================================
+```
+
+
 #### 存储过程
+```sql
+# 因为存储过程比较灵活，这里不写具体示例，主要写一些定义语法  
+
+# 声明语句结束符
+DELIMITER $$
+
+# =======================================================
+# 知识点提示！！！
+# 上面的($$)结束符可以自己定义，MySQL中默认是;   
+# =======================================================
+
+# 声明存储过程
+CREATE PROCEDURE 存储过程名( [IN | OUT | INOUT] 参数 数据类型)
+
+# =======================================================
+# 知识点提示！！！
+# IN 输入参数  OUT 输出参数  INOUT 输入输出参数     
+# =======================================================
+
+# 声明存储函数
+CREATE FUNCTION 存储函数名(参数 数据类型)
+
+# 声明存储过程开始和结束
+BEGIN ...... END
+
+# 声明变量
+DECLARE 变量名 变量类型 默认值
+
+# 变量赋值
+SET @变量名 = 值
+
+# 调用存储过程
+CALL 存储过程名(传参)
+
+# 注释
+-- 注释体
+
+# 查看存储过程的详细
+SHOW CREATE PROCEDURE 数据库.存储过程名  
+
+# 修改存储过程
+ALTER PROCEDURE
+
+# 删除存储过程
+DROP PROCEDURE
+
+# =======================================================
+# 知识点提示！！！
+# 把过多的业务逻辑写在存储过程汇中不利于维护管理，除了个别对业务性能要求较高的业务，其他的必要性不是很大    
+# =======================================================
+```
+
+
 #### 备份还原
+```sql
+# 备份命令
+# 选项参考下方列表内容
+mysqldump [选项] 数据库名 [表名] > 脚本名
+mysqldump [选项] --数据库名 [选项 表名] > 脚本名
+
+# 备份所有数据库命令
+mysqldump [选项] --all-databases [选项]  > 脚本名
+
+# =======================================================
+# 知识点提示！！！
+# 下方在导入备份数据库前，db_name如果没有，是需要创建的，而且与db_name.db中数据库名是一样的才可以导入
+# =======================================================
+
+# 系统行还原命令
+mysqladmin -uroot -p create db_name 
+mysql -uroot -p  db_name < /backup/mysqldump/db_name.db
+
+# source还原命令
+mysql > use db_name
+mysql > source /backup/mysqldump/db_name.db
+
+# =======================================================
+# 知识点提示！！！
+# 不同的业务场景与规模有不同的备份策略  
+# 双机热备：通过日志文件来传输服务器上的数据变化，主服务器上数据被更新时触发，传输相应的日志文件到从服务器，并通过日志文件，作出相应的操作  
+# =======================================================
+```
+
+##### 备份命令选项说明
+|  参数名   | 缩写  |  含义  |
+|  :----:  |  :----:  |  :----:  |
+|  --host  |  -h  |  服务器IP地址  |
+|  --port  |  -P  |  服务器端口号  |
+|  --user  |  -u  |  MySQL用户名  |
+|  --password  |  -p  |  MySQL密码  |
+|  --databases  |    |  指定要备份的数据库  |
+|  --all-databases  |    |  备份MySQL服务器上的所有数据库  |
+|  --compact  |    |  压缩模式，产生更少的输出  |
+|  --comments  |    |  添加注释信息  |
+|  --complete-insert  |    |  输出完成的插入语句  |
+|  --lock-tables  |    |  备份前，锁定所有数据库表  |
+|  --no-create-db/--no-create-info  |    |  禁止生成创建数据库语句  |
+|  --force  |    |  当出现错误时仍然继续备份操作  |
+|  --default-character-set  |    |  指定默认字符集  |
+|  --add-locks  |    |  备份数据库表时锁定数据库表  |
+
+
 #### 用户
+用户权限是非常敏感的一类操作，需要非常小心的使用，所以这里只介绍修改密码的常用操作，其余操作请在完整了解过MySQL权限系统之后再作尝试  
+您可以[参考这篇文章 -- Mysql用户与权限操作](https://blog.csdn.net/weixin_44826356/article/details/108730250)系统学习  
+```sql
+# 修改用户密码
+UPDATE USER SET authentication_string=passworD("你的新密码") WHERE USER='root';
+
+# =======================================================
+# 在MySQL5.7中，mysql.user表中已不再包含Password字段，而是使用plugin和authentication_string字段保存用户身份验证的信息
+# =======================================================
+```
