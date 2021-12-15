@@ -7,7 +7,6 @@ public class jdbcTest {
     public void run() throws ClassNotFoundException, SQLException {
         String driverClassName = "com.mysql.cj.jdbc.Driver";
 
-        // String dbUrl = "jdbc:mysql://211.149.128.130:3306/test?useUnicode=true&characterEncoding=UTF-8";
         // useUnicode=true
         // characterEncoding=UTF-8
         // 连接地址的其他参数说明：https://www.cnblogs.com/mracale/p/5842572.html
