@@ -8,7 +8,7 @@ learn Java
 ### 主目录说明
 |  java-blog   | java-note  |  java-pratice  |  java-project  |
 |  :----:  |  :----:  |  :----:  |  :----:  |
-| java博客文章  | java学习笔记 | java练习 | java学习项目 |
+|  java博客文章  |  java学习笔记  |  java练习  |  java学习项目  |
 
 
 ## 0.2.10.20211215
