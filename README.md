@@ -8,11 +8,18 @@ learn Java
 ### 主目录说明
 |  java-blog   | java-note  |  java-pratice  |  java-project  |
 |  :----:  |  :----:  |  :----:  |  :----:  |
-|  java博客文章  |  java学习笔记  |  java练习  |  java学习项目  |
+|  java博客文章  |  java学习笔记  |  java代码练习/mysql代码练习  |  java学习项目  |
 
+
+## 0.3.2.20220106  
+* 新增mysql练习：`sql-daily-exam -> 2022 -> 2022-01 -> 20220105.md`  
+
+## 0.3.1.20220105  
+* 开始添加mysql练习记录，放在`java-pratice`下面  
+* 新增mysql练习：`sql-daily-exam -> 2022 -> 2022-01 -> 20220104.md`  
 
 ## 0.2.10.20211215
-* 新增练习：非常简易的jdbc连接练习  
+* 新增java练习：非常简易的jdbc连接练习  
 
 ## 0.2.9.20211214
 * 新增笔记：MySQL学习笔记  
