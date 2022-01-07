@@ -11,6 +11,9 @@ learn Java
 |  java博客文章  |  java学习笔记  |  java代码练习/mysql代码练习  |  java学习项目  |
 
 
+## 0.3.3.20220107  
+* 新增mysql练习：`sql-daily-exam -> 2022 -> 2022-01 -> 20220106.md`  
+
 ## 0.3.2.20220106  
 * 新增mysql练习：`sql-daily-exam -> 2022 -> 2022-01 -> 20220105.md`  
 
