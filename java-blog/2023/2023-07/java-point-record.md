@@ -90,4 +90,20 @@ modelVersion  指定了当前Maven模型的版本号，对于Maven2和Maven3来�
 2. [Pom.xml详解](https://blog.csdn.net/lukabruce/article/details/129046286)
 
 
-**最后更新时间：2023年8月4日**
+### 开发问题简易记录合集
+#### 如何使得后端接口返回实体类属性为null直接过滤不返回
+在大多数情况下，后端框架并不会将实体类中的属性为 null 的字段直接过滤不返回，而是会将这些属性包含在响应中并赋予 null 值。然而，如果你希望在返回时过滤掉实体类中属性为 null 的字段，你可以考虑使用一些库或框架来实现这一功能，或者手动处理返回结果。
+举例来说，如果你使用 Spring 框架，你可以使用 Jackson 库来配置返回结果的过滤行为。你可以在实体类的属性上使用 `@JsonInclude(JsonInclude.Include.NON_NULL)` 注解，这样在序列化为 JSON 时，属性为 null 的字段就会被过滤掉。示例代码如下：
+```java
+import com.fasterxml.jackson.annotation.JsonInclude;
+public class YourEntity {
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String property1;
+    // 其他属性和方法
+}
+```
+另外，你也可以在返回结果的时候手动处理，过滤掉属性为 null 的字段，然后返回处理后的结果。这种方式需要在代码中进行显式的处理，例如使用 Java 8 的 Stream API 或者手动遍历对象属性，然后过滤掉属性为 null 的字段。
+总的来说，要实现后端接口返回实体类属性为 null 时直接过滤不返回，你可以使用框架提供的特性或者手动处理返回结果。
+
+
+**最后更新时间：2023年12月15日**
