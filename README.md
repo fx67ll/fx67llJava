@@ -6,10 +6,13 @@ learn Java
 
 
 ### 主目录说明
-|  java-blog   | java-note  |  java-pratice  |  java-project  |
-|  :----:  |  :----:  |  :----:  |  :----:  |
-|  java博客文章  |  java学习笔记  |  java代码练习/mysql代码练习  |  java学习项目  |
+|  java-blog   | java-note  |  java-pratice  |  java-project  |  java-sql  |
+|  :----:  |  :----:  |  :----:  |  :----:  |  :----:  |
+|  java博客文章  |  java学习笔记  |  java代码练习/mysql代码练习  |  java学习项目  |  sql相关资料  |
 
+
+## 0.4.1.20250828  
+* 新增sql相关资料文件夹   
 
 ## 0.3.6.20230727  
 * 更新博文：Java & SpringBoot 知识点记录（持续更新）  
