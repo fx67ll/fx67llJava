@@ -31,9 +31,10 @@ CREATE TABLE `fx67ll_ai_prompt_template` (
   `prompt_custom_config_params` text COMMENT '模型调用参数覆盖配置（JSON格式，优先级高于模型表默认参数）',
   `prompt_status` char(1) DEFAULT '0' COMMENT '模板启用状态（字典码：0-启用，1-停用）',
   `prompt_remark` varchar(1023) DEFAULT '' COMMENT '模板业务备注（说明使用场景、注意事项等）',
-  `create_by` varchar(64) DEFAULT '' COMMENT '记录创建者标识（关联系统用户表）',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
+  `create_by` varchar(64) DEFAULT '' COMMENT '记录创建者标识用户名（关联系统用户表）',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '记录创建时间',
-  `update_by` varchar(64) DEFAULT '' COMMENT '记录最后更新者标识（关联系统用户表）',
+  `update_by` varchar(64) DEFAULT '' COMMENT '记录最后更新者标识用户名（关联系统用户表）',
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '记录最后更新时间',
   `del_flag` char(1) DEFAULT '0' COMMENT '逻辑删除标志（字典码：0-存在，2-已删除）',
   PRIMARY KEY (`prompt_id`),
@@ -42,6 +43,8 @@ CREATE TABLE `fx67ll_ai_prompt_template` (
   KEY `idx_model_id` (`model_id`) COMMENT '模型ID索引（加速按模型查询关联模板）',
   KEY `idx_group_scene_model` (`group_id`, `scene_id`, `model_id`) COMMENT '分组+场景+模型组合索引（优化多维度联合查询性能）',
   KEY `idx_prompt_status` (`prompt_status`) COMMENT '模板状态索引（加速筛选启用/停用模板）',
+  KEY `idx_user_id` (`user_id`) COMMENT '用户ID索引（加速按用户查询模板）',
+  KEY `idx_user_id_status` (`user_id`, `prompt_status`) COMMENT '用户+状态组合索引（优化按用户筛选启用模板）',
   FOREIGN KEY (`group_id`) REFERENCES `fx67ll_ai_prompt_group`(`group_id`) ON DELETE RESTRICT,
   FOREIGN KEY (`scene_id`) REFERENCES `fx67ll_ai_prompt_scene`(`scene_id`) ON DELETE RESTRICT,
   FOREIGN KEY (`model_id`) REFERENCES `fx67ll_ai_prompt_model`(`model_id`) ON DELETE RESTRICT
@@ -57,14 +60,17 @@ CREATE TABLE `fx67ll_ai_prompt_group` (
   `group_desc` varchar(1023) DEFAULT '' COMMENT '分组业务描述（说明分组的用途、范围）',
   `group_status` char(1) DEFAULT '0' COMMENT '分组启用状态（字典码：0-启用，1-停用）',
   `group_sort` int(4) DEFAULT 0 COMMENT '分组展示排序（升序排列，数值越小越靠前）',
-  `create_by` varchar(64) DEFAULT '' COMMENT '记录创建者标识（关联系统用户表）',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
+  `create_by` varchar(64) DEFAULT '' COMMENT '记录创建者标识用户名（关联系统用户表）',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '记录创建时间',
-  `update_by` varchar(64) DEFAULT '' COMMENT '记录最后更新者标识（关联系统用户表）',
+  `update_by` varchar(64) DEFAULT '' COMMENT '记录最后更新者标识用户名（关联系统用户表）',
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '记录最后更新时间',
   `del_flag` char(1) DEFAULT '0' COMMENT '逻辑删除标志（字典码：0-存在，2-已删除）',
   PRIMARY KEY (`group_id`),
   UNIQUE KEY `uk_group_code` (`group_code`) COMMENT '分组编码唯一索引（防止业务编码重复）',
-  KEY `idx_group_status` (`group_status`) COMMENT '分组状态索引（加速筛选启用/停用分组）'
+  KEY `idx_group_status` (`group_status`) COMMENT '分组状态索引（加速筛选启用/停用分组）',
+  KEY `idx_user_id` (`user_id`) COMMENT '用户ID索引（加速按用户查询分组）',
+  KEY `idx_user_id_status` (`user_id`, `group_status`) COMMENT '用户+状态组合索引（优化按用户筛选启用分组）'
 ) ENGINE=innodb DEFAULT CHARSET=utf8mb4 COMMENT='AI Prompt模板分组表';
 ```
 
@@ -78,14 +84,17 @@ CREATE TABLE `fx67ll_ai_prompt_scene` (
   `scene_remark` varchar(1023) DEFAULT '' COMMENT '场景扩展备注',
   `scene_status` char(1) DEFAULT '0' COMMENT '场景启用状态（字典码：0-启用，1-停用）',
   `scene_sort` int(4) DEFAULT 0 COMMENT '场景展示排序（升序排列，数值越小越靠前）',
-  `create_by` varchar(64) DEFAULT '' COMMENT '记录创建者标识（关联系统用户表）',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
+  `create_by` varchar(64) DEFAULT '' COMMENT '记录创建者标识用户名（关联系统用户表）',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '记录创建时间',
-  `update_by` varchar(64) DEFAULT '' COMMENT '记录最后更新者标识（关联系统用户表）',
+  `update_by` varchar(64) DEFAULT '' COMMENT '记录最后更新者标识用户名（关联系统用户表）',
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '记录最后更新时间',
   `del_flag` char(1) DEFAULT '0' COMMENT '逻辑删除标志（字典码：0-存在，2-已删除）',
   PRIMARY KEY (`scene_id`),
   UNIQUE KEY `uk_scene_code` (`scene_code`) COMMENT '场景编码唯一索引（防止业务编码重复）',
-  KEY `idx_scene_status` (`scene_status`) COMMENT '场景状态索引（加速筛选启用/停用场景）'
+  KEY `idx_scene_status` (`scene_status`) COMMENT '场景状态索引（加速筛选启用/停用场景）',
+  KEY `idx_user_id` (`user_id`) COMMENT '用户ID索引（加速按用户查询场景）',
+  KEY `idx_user_id_status` (`user_id`, `scene_status`) COMMENT '用户+状态组合索引（优化按用户筛选启用场景）'
 ) ENGINE=innodb DEFAULT CHARSET=utf8mb4 COMMENT='AI Prompt场景管理表';
 ```
 
@@ -107,15 +116,18 @@ CREATE TABLE `fx67ll_ai_prompt_model` (
   `model_sort` int(4) DEFAULT 0 COMMENT '模型展示排序（升序排列，数值越小越靠前）',
   `model_token_price` decimal(10,6) DEFAULT 0.000000 COMMENT '模型计费单价（元/千Token，用于成本估算）',
   `model_token_currency` varchar(10) DEFAULT 'CNY' COMMENT '计价货币类型（ISO 4217货币码，如CNY、USD）',
-  `create_by` varchar(64) DEFAULT '' COMMENT '记录创建者标识（关联系统用户表）',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
+  `create_by` varchar(64) DEFAULT '' COMMENT '记录创建者标识用户名（关联系统用户表）',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '记录创建时间',
-  `update_by` varchar(64) DEFAULT '' COMMENT '记录最后更新者标识（关联系统用户表）',
+  `update_by` varchar(64) DEFAULT '' COMMENT '记录最后更新者标识用户名（关联系统用户表）',
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '记录最后更新时间',
   `del_flag` char(1) DEFAULT '0' COMMENT '逻辑删除标志（字典码：0-存在，2-已删除）',
   PRIMARY KEY (`model_id`),
   UNIQUE KEY `uk_model_code` (`model_code`) COMMENT '模型编码唯一索引（防止同一模型重复配置）',
   KEY `idx_model_vendor_status` (`model_vendor`, `model_status`) COMMENT '厂商+状态组合索引（加速筛选某厂商的启用模型）',
   KEY `idx_model_status` (`model_status`) COMMENT '模型状态索引（加速筛选启用/停用模型）',
+  KEY `idx_user_id` (`user_id`) COMMENT '用户ID索引（加速按用户查询模型）',
+  KEY `idx_user_id_vendor` (`user_id`, `model_vendor`) COMMENT '用户+厂商组合索引（优化按用户筛选某厂商模型）',
   CONSTRAINT `fk_model_api_key` FOREIGN KEY (`model_api_key`) REFERENCES `fx67ll_secret_key`(`secret_id`) ON DELETE RESTRICT,
   CONSTRAINT `fk_model_secret_key` FOREIGN KEY (`model_secret_key`) REFERENCES `fx67ll_secret_key`(`secret_id`) ON DELETE RESTRICT
 ) ENGINE=innodb DEFAULT CHARSET=utf8mb4 COMMENT='AI Prompt模型配置表';
@@ -138,15 +150,18 @@ CREATE TABLE `fx67ll_ai_prompt_limit_rule` (
   `circuit_window` int(4) DEFAULT 10000 COMMENT '熔断统计窗口时长（毫秒，默认10秒）',
   `circuit_timeout` int(4) DEFAULT 5000 COMMENT '熔断恢复超时时间（毫秒，默认5秒后尝试半开）',
   `limit_rule_status` char(1) DEFAULT '0' COMMENT '规则启用状态（字典码：0-启用，1-停用）',
-  `create_by` varchar(64) DEFAULT '' COMMENT '记录创建者标识（关联系统用户表）',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
+  `create_by` varchar(64) DEFAULT '' COMMENT '记录创建者标识用户名（关联系统用户表）',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '记录创建时间',
-  `update_by` varchar(64) DEFAULT '' COMMENT '记录最后更新者标识（关联系统用户表）',
+  `update_by` varchar(64) DEFAULT '' COMMENT '记录最后更新者标识用户名（关联系统用户表）',
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '记录最后更新时间',
   `del_flag` char(1) DEFAULT '0' COMMENT '逻辑删除标志（字典码：0-存在，2-已删除）',
   PRIMARY KEY (`limit_rule_id`),
   KEY `idx_limit_dim_target` (`limit_rule_dimension`, `limit_rule_target_id`) COMMENT '维度+目标ID组合索引（加速查询某维度下的规则）',
   KEY `idx_limit_type_status` (`limit_rule_type`, `limit_rule_status`) COMMENT '类型+状态组合索引（加速筛选启用的流控/熔断规则）',
-  KEY `idx_limit_dim_type_status` (`limit_rule_dimension`, `limit_rule_type`, `limit_rule_status`) COMMENT '维度+类型+状态组合索引（优化高频查询性能）'
+  KEY `idx_limit_dim_type_status` (`limit_rule_dimension`, `limit_rule_type`, `limit_rule_status`) COMMENT '维度+类型+状态组合索引（优化高频查询性能）',
+  KEY `idx_user_id` (`user_id`) COMMENT '用户ID索引（加速按用户查询规则）',
+  KEY `idx_user_id_type_status` (`user_id`, `limit_rule_type`, `limit_rule_status`) COMMENT '用户+类型+状态组合索引（优化按用户筛选启用规则）'
 ) ENGINE=innodb DEFAULT CHARSET=utf8mb4 COMMENT='AI Prompt 限流/熔断规则表（适配Sentinel框架）';
 ```
 
@@ -170,18 +185,19 @@ CREATE TABLE `fx67ll_ai_request_log` (
   `error_msg` text COMMENT '错误堆栈信息（调用失败时存储）',
   `caller_ip` varchar(233) DEFAULT '' COMMENT '调用者客户端IP地址',
   `request_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '请求发起时间（分区键，精确到秒）',
-  `create_by` varchar(64) DEFAULT '' COMMENT '调用者用户标识（关联系统用户表）',
+  `user_id` bigint(20) NOT NULL COMMENT '记录创建者标识用户名（关联系统用户表）',
   PRIMARY KEY (`request_log_id`, `request_time`),
   KEY `idx_request_log_id` (`request_log_id`),
   KEY `idx_request_time` (`request_time`),
   KEY `idx_prompt_id` (`prompt_id`),
   KEY `idx_scene_id` (`scene_id`),
   KEY `idx_model_id` (`model_id`),
-  KEY `idx_create_by` (`create_by`),
   KEY `idx_call_status` (`call_status`),
   KEY `idx_request_time_vendor` (`request_time`, `model_vendor`),
   KEY `idx_scene_model_time` (`scene_id`, `model_id`, `request_time`),
-  KEY `idx_create_by_time` (`create_by`, `request_time`)
+  KEY `idx_user_id` (`user_id`) COMMENT '用户ID索引（加速按用户查询调用日志）',
+  KEY `idx_user_id_time` (`user_id`, `request_time`) COMMENT '用户+时间组合索引（优化按用户查询时间段日志）',
+  KEY `idx_user_id_status` (`user_id`, `call_status`) COMMENT '用户+调用状态组合索引（优化按用户筛选失败日志）'
 ) ENGINE=innodb DEFAULT CHARSET=utf8mb4 
 COMMENT='AI 调用请求日志表（按request_time月份分区，记录所有AI API调用的详细信息）'
 PARTITION BY RANGE (TO_DAYS(request_time)) (
@@ -272,15 +288,18 @@ CREATE TABLE `fx67ll_dortmund_season` (
   `season_end_date` date NOT NULL COMMENT '赛季结束日期',
   `season_status` char(1) DEFAULT '0' COMMENT '赛季状态（字典码：0-进行中，1-已结束，2-未开始）',
   `season_sort` int(4) DEFAULT 0 COMMENT '赛季展示排序（升序排列，数值越小越靠前）',
-  `create_by` varchar(64) DEFAULT '' COMMENT '记录创建者标识（关联系统用户表）',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
+  `create_by` varchar(64) DEFAULT '' COMMENT '记录创建者标识用户名（关联系统用户表）',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '记录创建时间',
-  `update_by` varchar(64) DEFAULT '' COMMENT '记录最后更新者标识（关联系统用户表）',
+  `update_by` varchar(64) DEFAULT '' COMMENT '记录最后更新者标识用户名（关联系统用户表）',
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '记录最后更新时间',
   `del_flag` char(1) DEFAULT '0' COMMENT '逻辑删除标志（字典码：0-存在，2-已删除）',
   PRIMARY KEY (`season_id`),
   UNIQUE KEY `uk_season_code` (`season_code`) COMMENT '赛季编码唯一索引（防止业务编码重复）',
   KEY `idx_season_status` (`season_status`) COMMENT '赛季状态索引（加速筛选进行中/已结束赛季）',
-  KEY `idx_season_sort` (`season_sort`) COMMENT '赛季排序索引（加速前端展示排序）'
+  KEY `idx_season_sort` (`season_sort`) COMMENT '赛季排序索引（加速前端展示排序）',
+  KEY `idx_user_id` (`user_id`) COMMENT '用户ID索引（加速按用户查询赛季）',
+  KEY `idx_user_id_status` (`user_id`, `season_status`) COMMENT '用户+状态组合索引（优化按用户筛选进行中赛季）'
 ) ENGINE=innodb DEFAULT CHARSET=utf8mb4 COMMENT='赛季管理表';
 ```
 
@@ -298,16 +317,19 @@ CREATE TABLE `fx67ll_dortmund_team` (
   `team_remark` varchar(1023) DEFAULT '' COMMENT '球队业务备注',
   `team_status` char(1) DEFAULT '0' COMMENT '球队状态（字典码：0-启用，1-停用）',
   `team_sort` int(4) DEFAULT 0 COMMENT '球队展示排序（升序排列，数值越小越靠前）',
-  `create_by` varchar(64) DEFAULT '' COMMENT '记录创建者标识（关联系统用户表）',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
+  `create_by` varchar(64) DEFAULT '' COMMENT '记录创建者标识用户名（关联系统用户表）',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '记录创建时间',
-  `update_by` varchar(64) DEFAULT '' COMMENT '记录最后更新者标识（关联系统用户表）',
+  `update_by` varchar(64) DEFAULT '' COMMENT '记录最后更新者标识用户名（关联系统用户表）',
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '记录最后更新时间',
   `del_flag` char(1) DEFAULT '0' COMMENT '逻辑删除标志（字典码：0-存在，2-已删除）',
   PRIMARY KEY (`team_id`),
   UNIQUE KEY `uk_team_code` (`team_code`) COMMENT '球队编码唯一索引（防止业务编码重复）',
   KEY `idx_team_status` (`team_status`) COMMENT '球队状态索引（加速筛选启用/停用球队）',
   KEY `idx_team_sort` (`team_sort`) COMMENT '球队排序索引（加速前端展示排序）',
-  KEY `idx_team_country` (`team_country`) COMMENT '球队国家索引（加速按国家筛选球队）'
+  KEY `idx_team_country` (`team_country`) COMMENT '球队国家索引（加速按国家筛选球队）',
+  KEY `idx_user_id` (`user_id`) COMMENT '用户ID索引（加速按用户查询球队）',
+  KEY `idx_user_id_country` (`user_id`, `team_country`) COMMENT '用户+国家组合索引（优化按用户筛选某国家球队）'
 ) ENGINE=innodb DEFAULT CHARSET=utf8mb4 COMMENT='球队管理表';
 ```
 
@@ -324,9 +346,10 @@ CREATE TABLE `fx67ll_dortmund_match` (
   `match_remark` varchar(1023) DEFAULT '' COMMENT '比赛业务备注（如轮次、特殊说明）',
   `match_status` char(1) DEFAULT '0' COMMENT '比赛状态（字典码：0-未开始，1-进行中，2-已结束）',
   `analysis_count` int(4) DEFAULT 0 COMMENT 'AI分析次数（统计该比赛已生成的分析报告数量）',
-  `create_by` varchar(64) DEFAULT '' COMMENT '记录创建者标识（关联系统用户表）',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
+  `create_by` varchar(64) DEFAULT '' COMMENT '记录创建者标识用户名（关联系统用户表）',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '记录创建时间',
-  `update_by` varchar(64) DEFAULT '' COMMENT '记录最后更新者标识（关联系统用户表）',
+  `update_by` varchar(64) DEFAULT '' COMMENT '记录最后更新者标识用户名（关联系统用户表）',
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '记录最后更新时间',
   `del_flag` char(1) DEFAULT '0' COMMENT '逻辑删除标志（字典码：0-存在，2-已删除）',
   PRIMARY KEY (`match_id`),
@@ -340,6 +363,9 @@ CREATE TABLE `fx67ll_dortmund_match` (
   KEY `idx_season_match_status` (`season_id`, `match_status`) COMMENT '赛季+状态组合索引（优化按赛季查询未开始比赛）',
   KEY `idx_season_match_time` (`season_id`, `match_time`) COMMENT '赛季+时间组合索引（优化某赛季比赛按时间排序）',
   KEY `idx_match_time_status` (`match_time`, `match_status`) COMMENT '时间+状态组合索引（优化查询近期未开始比赛）',
+  KEY `idx_user_id` (`user_id`) COMMENT '用户ID索引（加速按用户查询比赛）',
+  KEY `idx_user_id_season` (`user_id`, `season_id`) COMMENT '用户+赛季组合索引（优化按用户筛选某赛季比赛）',
+  KEY `idx_user_id_status` (`user_id`, `match_status`) COMMENT '用户+状态组合索引（优化按用户筛选已结束比赛）',
   FOREIGN KEY (`season_id`) REFERENCES `fx67ll_dortmund_season`(`season_id`) ON DELETE RESTRICT,
   FOREIGN KEY (`home_team_id`) REFERENCES `fx67ll_dortmund_team`(`team_id`) ON DELETE RESTRICT,
   FOREIGN KEY (`away_team_id`) REFERENCES `fx67ll_dortmund_team`(`team_id`) ON DELETE RESTRICT
@@ -358,9 +384,10 @@ CREATE TABLE `fx67ll_dortmund_match_analysis` (
   `raw_prompt` text NOT NULL COMMENT '最终请求Prompt（含渲染后的球队/比赛数据，自定义分析时为用户输入文本）',
   `raw_ai_response` text NOT NULL COMMENT 'AI原始响应内容（JSON格式字符串）',
   `analysis_remark` varchar(1023) DEFAULT '' COMMENT '分析业务备注',
-  `create_by` varchar(64) DEFAULT '' COMMENT '记录创建者标识（关联系统用户表）',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
+  `create_by` varchar(64) DEFAULT '' COMMENT '记录创建者标识用户名（关联系统用户表）',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '记录创建时间',
-  `update_by` varchar(64) DEFAULT '' COMMENT '记录最后更新者标识（关联系统用户表）',
+  `update_by` varchar(64) DEFAULT '' COMMENT '记录最后更新者标识用户名（关联系统用户表）',
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '记录最后更新时间',
   `del_flag` char(1) DEFAULT '0' COMMENT '逻辑删除标志（字典码：0-存在，2-已删除）',
   PRIMARY KEY (`analysis_id`),
@@ -370,6 +397,9 @@ CREATE TABLE `fx67ll_dortmund_match_analysis` (
   KEY `idx_create_time` (`create_time`) COMMENT '创建时间索引（加速按时间范围查询分析）',
   KEY `idx_match_prompt_model` (`match_id`, `prompt_id`, `model_id`) COMMENT '比赛+模板+模型组合索引（优化高频查询：某比赛的特定模板分析）',
   KEY `idx_analysis_type` (`analysis_type`) COMMENT '分析类型索引（加速筛选模板/自定义分析）',
+  KEY `idx_user_id` (`user_id`) COMMENT '用户ID索引（加速按用户查询分析记录）',
+  KEY `idx_user_id_match` (`user_id`, `match_id`) COMMENT '用户+比赛组合索引（优化按用户查询某比赛分析）',
+  KEY `idx_user_id_type` (`user_id`, `analysis_type`) COMMENT '用户+分析类型组合索引（优化按用户筛选自定义分析）',
   FOREIGN KEY (`match_id`) REFERENCES `fx67ll_dortmund_match`(`match_id`) ON DELETE RESTRICT,
   FOREIGN KEY (`prompt_id`) REFERENCES `fx67ll_ai_prompt_template`(`prompt_id`) ON DELETE RESTRICT,
   FOREIGN KEY (`model_id`) REFERENCES `fx67ll_ai_prompt_model`(`model_id`) ON DELETE RESTRICT
@@ -402,9 +432,10 @@ CREATE TABLE `fx67ll_dortmund_match_score` (
   `extra_score_str` varchar(2333) DEFAULT NULL COMMENT '扩展评分数据（JSON格式字符串，存储非标准化评分字段）',
   -- 基础通用字段
   `score_remark` varchar(1023) DEFAULT '' COMMENT '评分业务备注',
-  `create_by` varchar(64) DEFAULT '' COMMENT '记录创建者标识（关联系统用户表）',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
+  `create_by` varchar(64) DEFAULT '' COMMENT '记录创建者标识用户名（关联系统用户表）',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '记录创建时间',
-  `update_by` varchar(64) DEFAULT '' COMMENT '记录最后更新者标识（关联系统用户表）',
+  `update_by` varchar(64) DEFAULT '' COMMENT '记录最后更新者标识用户名（关联系统用户表）',
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '记录最后更新时间',
   `del_flag` char(1) DEFAULT '0' COMMENT '逻辑删除标志（字典码：0-存在，2-已删除）',
   -- 索引与约束
@@ -414,6 +445,8 @@ CREATE TABLE `fx67ll_dortmund_match_score` (
   KEY `idx_predicted_result` (`predicted_result`) COMMENT '预测结果索引（加速按预测结果筛选）',
   KEY `idx_create_time` (`create_time`) COMMENT '创建时间索引（加速查询近期评分）',
   KEY `idx_match_predicted_result` (`match_id`, `predicted_result`) COMMENT '比赛+预测结果组合索引（优化高频查询：某比赛的预测结果）',
+  KEY `idx_user_id` (`user_id`) COMMENT '用户ID索引（加速按用户查询评分）',
+  KEY `idx_user_id_predicted` (`user_id`, `predicted_result`) COMMENT '用户+预测结果组合索引（优化按用户筛选某预测结果的评分）',
   -- 值域约束
   CONSTRAINT `chk_confidence_range` CHECK (`predicted_confidence` BETWEEN 0 AND 100),
   CONSTRAINT `chk_home_total_range` CHECK (`home_total_score` BETWEEN 0 AND 100),
